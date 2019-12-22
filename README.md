@@ -9,3 +9,17 @@ Term project for CS484 Introduction to Computer Vision course in Bilkent Univers
 - Classification and localization
 - Calculate evaluation metrics
 - Write the final report
+
+
+## Division of work
+
+1. __Beril__: Reading n images and their labels, then preprocessing the data. Extracting ResNet50 features.
+    * Output: 2048-dimensional ResNet50 features (n, 2048)
+
+2. __Kerem__: Training n images
+    * Input: 2048-dimensional ResNet50 features (n, 2048)
+    * Output: 10 predictions for each class for an image (n, 10)
+
+3. __Salih__: Extracting candidate windows
+    * Input: Test images (n, 224, 224, 3)
+    * Output: Array of bounding boxes (candidate regions)
