@@ -10,7 +10,12 @@ HIDDEN_SIZE = 32
 BATCH_SIZE = 16
 LR = 1e-3
 
-data_transform = transforms.Compose([])
+data_transform = transforms.Compose([
+    # Resize
+    # Pad
+    # Normalize
+    # Extract features
+])
 train_dataset = datasets.ImageFolder(root='../data/train',
                                          transform=data_transform)
 loader_train = torch.utils.data.DataLoader(train_dataset,
