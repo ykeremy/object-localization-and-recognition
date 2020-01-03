@@ -23,3 +23,8 @@ Term project for CS484 Introduction to Computer Vision course in Bilkent Univers
 3. __Salih__: Extracting candidate windows
     * Input: Test images (n, 224, 224, 3)
     * Output: Array of bounding boxes (candidate regions)
+    
+## A few details on implementation (things not to forget)
+OpenCV Selective Search implementation is not part of OpenCV official distribution. It is part of OpenCV's extra modules which are not released as a part of official OpenCV distribution, called [opencv_contrib](https://github.com/opencv/opencv_contrib), which also includes the base modules.
+
+Here is a [link](https://pypi.org/project/opencv-contrib-python/) with installation details.
