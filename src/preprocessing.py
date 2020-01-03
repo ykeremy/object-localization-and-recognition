@@ -1,7 +1,5 @@
 # Preprocessing of images
 import torch
-from PIL import Image
-import statistics
 
 
 class Padding(object):
@@ -12,30 +10,30 @@ class Padding(object):
     """
 
     def __init__(self, output_size):
-        assert isinstance(output_size, (int, tuple))
+        assert isinstance(output_size, (int, list))
         self.output_size = output_size
 
     def __call__(self, image):  # image is tensor, before calling Pad, call ToTensor()
-        padded_image = torch.zeros(self.output_size, 3)
-        image = image.ToTensor()
+        padded_image = torch.zeros([3, *self.output_size])
         image_size = (
             image.size()
         )  # get the resized image size to place the original image in the padded image
+        print(image_size)
         if image_size[1] > image_size[2]:  # width is 224 pixels, pad height
             starting_index = int((self.output_size[1] - image_size[2]) / 2)
             finishing_index = starting_index + image_size[2]
-            padded_image[:, starting_index:finishing_index, :] = image
+            padded_image[:, :, starting_index:finishing_index] = image
         else:  # height is 224 pixels, pad width
             starting_index = int((self.output_size[0] - image_size[1]) / 2)
             finishing_index = starting_index + image_size[1]
-            padded_image[starting_index:finishing_index, :, :] = image
+            padded_image[:, starting_index:finishing_index, :] = image
 
         return padded_image
 
 
 class Resize(object):
     def __init__(self, desired_dimension):
-        assert isinstance(desired_dimension, (int, tuple))
+        assert isinstance(desired_dimension, int)
         self.desired_dimension = desired_dimension
 
     def __call__(self, image):
@@ -44,10 +42,10 @@ class Resize(object):
 
         if width > height:
             new_width = self.desired_dimension
-            new_height = self.desired_dimension / aspect_ratio
+            new_height = int(self.desired_dimension / aspect_ratio)
         else:
             new_height = self.desired_dimension
-            new_width = self.desired_dimension * aspect_ratio
+            new_width = int(self.desired_dimension * aspect_ratio)
 
         resized_image = image.resize((new_width, new_height), resample=0)
 
@@ -62,18 +60,15 @@ class Normalize(object):
     def __call__(self, image):
         normalized_image = torch.zeros(image.size())
         r = image[0, :, :]
-        normalized_r = (r - statistics.mean(r)) / statistics.stdev(r)  # mean 0, std 1
-        normalized_r = normalized_r * self.std[0] + self.mean[0]
+        normalized_r = (r - self.mean[0]) / self.std[0]  # mean 0, std 1
         normalized_image[0, :, :] = normalized_r
 
         g = image[1, :, :]
-        normalized_g = (g - statistics.mean(g)) / statistics.stdev(g)  # mean 0, std 1
-        normalized_g = normalized_g * self.std[1] + self.mean[1]
+        normalized_g = (g - self.mean[1]) / self.std[1]  # mean 0, std 1
         normalized_image[1, :, :] = normalized_g
 
         b = image[2, :, :]
-        normalized_b = (b - statistics.mean(b)) / statistics.stdev(b)  # mean 0, std 1
-        normalized_b = normalized_b * self.std[2] + self.mean[2]
+        normalized_b = (b - self.mean[2]) / self.std[2]  # mean 0, std 1
         normalized_image[2, :, :] = normalized_b
 
         return normalized_image
