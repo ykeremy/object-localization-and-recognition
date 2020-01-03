@@ -5,9 +5,10 @@ import os
 import cv2 as cv
 from SelectiveSearch import SelectiveSearch
 import numpy as np
+
 #%% Get all test image filenames
 test_img_path = "./data/test/images"
-filenames = (os.listdir(test_img_path))
+filenames = os.listdir(test_img_path)
 
 #%% Read all images
 images = []

@@ -2,7 +2,6 @@ from torch import nn
 
 
 class FeedForwardNN(nn.Module):
-
     def __init__(self, hidden_size):
         super().__init__()
         self.fc1 = nn.Linear(2048, hidden_size)

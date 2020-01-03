@@ -1,8 +1,8 @@
 import cv2 as cv
 import numpy as np
 
-class SelectiveSearch:
 
+class SelectiveSearch:
     def __init__(self):
         self.threshold = [0, 0]
         cv.setUseOptimized(True)
@@ -11,8 +11,7 @@ class SelectiveSearch:
     def process(self, image_list):
         all_boxes = []
         for image in image_list:
-            ss_instance =  \
-                cv.ximgproc.segmentation.createSelectiveSearchSegmentation()
+            ss_instance = cv.ximgproc.segmentation.createSelectiveSearchSegmentation()
             ss_instance.setBaseImage(image)
             ss_instance.switchToSelectiveSearchFast()
 
@@ -21,13 +20,12 @@ class SelectiveSearch:
 
             # filter according to width and height thresholds
             w_thresh, h_thresh = self.threshold
-            boxes = \
-                boxes[np.where((boxes[:,2] > w_thresh) * (boxes[:,3] > h_thresh))]
+            boxes = boxes[np.where((boxes[:, 2] > w_thresh) * (boxes[:, 3] > h_thresh))]
 
             # convert bounding boxes to x1, y1, x2, y2 form
             # by setting x2 = x1 + width, y2 = y1 + height
-            boxes[:,2] = boxes[:,2] + boxes[:,0]
-            boxes[:,3] = boxes[:,3] + boxes[:,1]
+            boxes[:, 2] = boxes[:, 2] + boxes[:, 0]
+            boxes[:, 3] = boxes[:, 3] + boxes[:, 1]
 
             all_boxes.append(boxes)
         return all_boxes
